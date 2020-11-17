@@ -9,6 +9,7 @@ import io.quarkus.security.jpa.UserDefinition
 import io.quarkus.security.jpa.Username
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.Table
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
 
@@ -26,6 +27,7 @@ dann ist die Klasse standardmäßig "final".
 
  */
 @Entity
+@Table(name = "myuser")
 @UserDefinition
 open class User: PanacheEntity() {
 
