@@ -1,8 +1,9 @@
 import okhttp3.*
 import okio.ByteString
+import java.util.*
 import java.util.concurrent.TimeUnit
 
-class GameSocketClient(url: String) : WebSocketListener() {
+class GameSocketClient(url: String, username: String, password: String) : WebSocketListener() {
 
     private val webSocket: WebSocket
 
@@ -13,9 +14,10 @@ class GameSocketClient(url: String) : WebSocketListener() {
                 .build()
         val request: Request = Request.Builder()
                 .url(url)
-                .addHeader("Authorization", "Basic MToxMjM0")
+                .addHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString(("$username:$password").toByteArray()))
                 .build()
         this.webSocket = client.newWebSocket(request, this)
+
     }
 
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
@@ -29,6 +31,9 @@ class GameSocketClient(url: String) : WebSocketListener() {
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+        if (response?.code == 401) {
+            println("auth failed :/")
+        }
         Log.i("WS failure ${t.message}")
 
     }

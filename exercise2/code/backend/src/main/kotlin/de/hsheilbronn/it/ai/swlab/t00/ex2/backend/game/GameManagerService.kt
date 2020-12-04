@@ -1,6 +1,7 @@
 package de.hsheilbronn.it.ai.swlab.t00.ex2.backend.game;
 
 import de.hsheilbronn.it.ai.swlab.t00.ex2.backend.game.gameinstance.SingleGameInstance
+import io.quarkus.security.Authenticated
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.enterprise.context.ApplicationScoped;
 import javax.websocket.*
@@ -20,6 +21,9 @@ class GameManagerService {
 
     @OnOpen
     fun onOpen(session: Session) {
+        if (session.userPrincipal == null) {
+            session.close(CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "AUTH_FAILED"))
+        }
         sessions.add(session)
     }
 
