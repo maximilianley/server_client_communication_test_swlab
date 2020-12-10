@@ -14,7 +14,8 @@ class GameSocketClient(url: String, username: String, password: String) : WebSoc
                 .build()
         val request: Request = Request.Builder()
                 .url(url)
-                .addHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString(("$username:$password").toByteArray()))
+                //.addHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString(("$username:$password").toByteArray())) // "MToxMjM0"
+                .addHeader("Authorization", "Basic " + "MToxMjM0")
                 .build()
         this.webSocket = client.newWebSocket(request, this)
 
@@ -40,16 +41,20 @@ class GameSocketClient(url: String, username: String, password: String) : WebSoc
 
     override fun onMessage(webSocket: WebSocket, text: String) {
         Log.i("WS message $text")
-
+        this.webSocket.send("message from client")
     }
 
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
         Log.i("WS byte message, ignoring")
-
+        //this.webSocket.send("message from client")
+        webSocket.send("message from client")
     }
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         Log.i("WS opened")
+        webSocket.send("QQQblaSS")
+        webSocket.send("dlsdldk")
+        webSocket.send("QQoioOI")
     }
 
     object Log {
