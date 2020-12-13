@@ -50,6 +50,7 @@ class GameManagerService {
         print("received message: "+msgString+" from: "+session.toString())
         println("session in list: KKKKK")
         println("session in list: "+sessions.contains(session).toString())
+        println("session is open: ${session.isOpen}")
         val message = MessageConverter.convertMessage(msgString)
         if (isInGameInstance(session)) {
             // send message to room
@@ -64,7 +65,12 @@ class GameManagerService {
         }
         */
         //session.basicRemote.sendText("message from server")
-        sessions[0].basicRemote.sendText("message from server")
+        //sessions[0].asyncRemote.sendObject("message from server")
+        sessions[0].asyncRemote.sendObject("broadcast message from server") { result: SendResult ->
+            if (result.exception != null) {
+                println("Unable to send message: " + result.exception)
+            }
+        }
         println("{\"from\":\""+sessions[0].id+"\",\"content\":\""+"message from server"+"\"}")
         //sessions[0].basicRemote.sendText("{\"from\":\""+sessions[0].id+"\",\"content\":\""+"message from server"+"\"}")
         broadcast("wkjqwlkj")
